@@ -1,0 +1,184 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://v3.bootcss.com/examples/blog/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>Blog Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'Blog/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'Blog/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'Blog/blog.css' %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{% static 'Blog/ie-emulation-modes-warning.js' %}"></script>
+    <script src="{% static 'kindeditor-4.1.10/kindeditor-all.js' %}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+{#      <script src="{% static 'kindeditor-4.1.10/kindeditor-all.js' %}"></script>#}
+    <![endif]-->
+    <style>
+        .container-fluid {
+            background-color: #b9def0;
+            font-size: 15px;
+            color: black;
+            font-weight: bold;
+
+        }
+
+        .item {
+            background: #9a9afb;
+        }
+
+        .item2 {
+            background: lightsteelblue;
+        }
+
+        .item3 {
+            width: 700px;
+        }
+
+        .item4 {
+            width: 700px;
+        }
+
+
+    </style>
+
+
+</head>
+
+<body>
+
+
+<div class="blog-masthead">
+    <div class="container">
+        <nav class="blog-nav">
+            {#            <a class="blog-nav-item active" href="http://v3.bootcss.com/examples/blog/#">Home</a>#}
+            {% if request.user.is_authenticated %}
+                <a class="blog-nav-item" href="/dell/">退出</a>
+                <a class="blog-nav-item   data-toggle='modal' " href="">修改密码</a>
+                <a class="blog-nav-item" href="http://127.0.0.1:8000/blog/{{ request.user.username }}">我的博客</a>
+                <a class="blog-nav-item" href="#">欢迎{{ request.user.username }}</a>
+            {% else %}
+                <a class="blog-nav-item" href="/login/">登录</a>
+                <a class="blog-nav-item" href="/register/">注册</a>
+            {% endif %}
+
+        </nav>
+    </div>
+</div>
+{#]#}
+
+
+<div class="container">
+
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+
+                    {% for foo in func %}
+
+                        <li><a href="">{{ foo.1 }}</a></li>
+                    {% endfor %}
+
+
+                </ul>
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
+    <div class="row">
+
+
+        <div class="col-sm-9 blog-main">
+
+            <div class="blog-post">
+                <form action="addarticle" method="post">
+                    <p class="item">添加随笔</p>
+                    <p class="item2">标题</p>
+                    {{ title }}
+                    <p>内容（TinyMCE编辑器，支持拖放/粘贴上传图片）</p>
+                    <textarea name="article_content" id="article_content" cols="30" rows="10" class="item4">{{ article }}</textarea>
+                    <p><input type="submit"></p>
+
+
+                </form>
+
+                <script>
+
+                        KindEditor.create("#article_content",{
+                            height:'400px',
+                            uploadJson:'/filename/',
+                            extraFileUploadParams:{
+{#                                模板渲染必须加引号#}
+                                'csrfmiddlewaretoken':'{{ csrf_token }}'
+                            }
+
+                        })
+
+
+                </script>
+
+
+            </div><!-- /.blog-post -->
+
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-2 col-sm-offset-1 blog-sidebar">
+
+            <p>
+                jdajdadadada
+            </p>
+
+
+        </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+
+    <footer class="blog-footer">
+        <p>Blog template built for <a href="http://getbootstrap.com/">Bootstrap</a> by <a
+                href="https://twitter.com/mdo">@mdo</a>.
+        </p>
+        <p>
+            <a href="http://v3.bootcss.com/examples/blog/#">Back to top</a>
+        </p>
+    </footer>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'Blog/jquery.min.js' %}"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="{% static 'Blog/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'Blog/ie10-viewport-bug-workaround.js' %}"></script>
+
+
+</body>
+</html>

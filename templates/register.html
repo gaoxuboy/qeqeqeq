@@ -1,0 +1,240 @@
+{% load staticfiles %}
+
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'blosa/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'blosa/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{% static 'blosa/ie-emulation-modes-warning.js' %}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="{% static 'bootstrap/js/jquery-3.2.1.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/reg.css' %}">
+
+    <style>
+        .outher{
+            width: 15px;
+            height: 40px;
+            margin-left: 10px;
+        }
+        .file{
+            padding: 0px;
+            margin-left: 15px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4">
+
+            <form class="form-signin" action="">
+                 {% csrf_token %}
+                <h2 class="form-signin-heading">注册页面</h2>
+                <label for="id_username">姓名</label>
+                {{ form_obj.username }}
+
+                <label for="id_password">密码</label>
+                {{ form_obj.password }}
+
+                <label for="id_new_password">确认密码</label>
+                {{ form_obj.new_password }}
+
+{#                <label for="id_phone_nunber">手机号</label>#}
+{#                {{ form_obj.phone_number }}#}
+
+
+                <label for="id_email">邮箱</label>
+                {{ form_obj.email}}
+
+                <label for="file_img" >头像</label>
+                <div class="form-control file_box">
+
+                     <img src="{% static 'img/4.jpg' %}" alt=""  id="file_img" class="file_list">
+                     <input type="file" id="file_input" class="file_list">
+                </div>
+
+                <label for="id_verification">验证码</label>
+                <div class="row">
+                    <div class="col-md-7 file">
+                        {{ form_obj.verification }}
+{#                        <input type="text" id="Verification" class="form-control" placeholder="Verification" required="" name="Verification">#}
+                    </div>
+
+                    <div class="col-md-2"  class="outher">
+                        <img class='value' src="/imger/" alt="">
+                        <a class="shua">刷新</a>
+                    </div>
+                </div>
+
+{#                </div>#}
+                <div class="checkbox">
+                    <label><input type="checkbox" value="remember-me"> Remember me</label>
+                </div>
+            </form>
+            <button class="btn btn-lg btn-primary btn-block commer" >注册</button>
+
+
+        </div>
+    </div>
+
+
+</div> <!-- /container -->
+
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{% static 'blosa/ie10-viewport-bug-workaround.js' %}"></script>
+
+
+<script>
+
+    //头像预览
+    $('#file_input').change(function () {
+
+        var reader=new FileReader();
+        var first_file=$(this)[0].files[0];//上传文件对象  拿到的是jq对象 【0】，转化为dom对象
+        reader.readAsDataURL(first_file);
+
+        reader.onload=function () {
+            return $('#file_img')[0].src =this.result;
+        }
+
+    });
+
+
+{#    注册验证#}
+{#    $('.commer').click(function () {#}
+{#        var  username=$('#id_username').val();#}
+{#        var  password=$('#id_password').val();#}
+{#        var  new_password=$('#id_new_password').val();#}
+{#        var  email=$('#id_email').val();#}
+{#        var  verification=$('#id_verification').val();#}
+{#        var csrf=$("[name='csrfmiddlewaretoken']").val();#}
+{##}
+{##}
+{#        $.ajax({#}
+{##}
+{#            url:'/register/',#}
+{#            type:'POST',#}
+{#            data:{'username':username,'password':password,'new_password':new_password,#}
+{#                'email':email,'verification':verification,#}
+{#            'csrfmiddlewaretoken':csrf},#}
+{##}
+{#            success:function (data) {#}
+{##}
+{#                data=JSON.parse(data);#}
+{#                if (data['flag']){#}
+{#                    location.href='/login/'#}
+{#                }else {#}
+{#                    var err_dict=data['error'];#}
+{#                    for (var i in  err_dict){#}
+{#                        console.log(err_dict[i]);#}
+{#                        var $span=$('<span>');#}
+{#                        var key=$('#id_'+i);#}
+{#                        if (i==='__all__'){#}
+{#                            key=id_new_password#}
+{#                        }#}
+{#                        $span.text(err_dict[i]).css({'color':'red'});#}
+{##}
+{#                        key.before($span)#}
+{#                    }#}
+{#                }#}
+{#            }#}
+{#        })#}
+{##}
+{##}
+{#    })#}
+
+    $('.commer').click(function () {
+        var  username=$('#id_username').val();
+        var  password=$('#id_password').val();
+        var  new_password=$('#id_new_password').val();
+        var  phone_nunber=$('#id_phone_nunber').val();
+        var  email=$('#id_email').val();
+        var  verification=$('#id_verification').val();
+        var csrf=$("[name='csrfmiddlewaretoken']").val();
+                //formData主要是传送数据，因为图片涉及到二进制
+        //实例一个文件上传对象
+        var formData=new FormData();
+        formData.append('username',username);
+        formData.append('password',password);
+        formData.append('new_password',new_password);
+        formData.append('email',email);
+        formData.append('verification',verification);
+        formData.append('csrfmiddlewaretoken',csrf);
+        //组装文件对象
+        formData.append('img',$('#file_input')[0].files[0]);//img  s是自己命名的，随便变量都可以，后面是固定的
+
+
+
+
+        form_list=[username,password,new_password,phone_nunber,email,verification]
+        $.ajax({
+            url:'/register/',
+            type:'POST',
+            data:formData,
+            processData:false,
+            contentType:false,
+{#            data:{'username':username,'password':password,'new_password':new_password,#}
+{#                'phone_nunber':phone_nunber,'email':email,'verification':verification,#}
+{#            'csrfmiddlewaretoken':csrf},#}
+            success:function (data) {
+{#                    alert(data);#}
+                if (data === "True"){
+                    location.href="/login/"
+                }
+                else {
+                    data = JSON.parse(data);
+                    console.log(data);
+{#                    $("input").each(function () {#}
+{#                       $(this).next().remove();#}
+{#                    });#}
+                    for (var i in data){
+
+                        var key = "id_"+i;
+                        var $span = $("<span>");
+                        if (i === "__all__"){
+                            key = "id_new_password"
+                        }
+                        $span.text(data[i][0]).css({"color":"red"});
+                        console.log(data[i][0])
+                        $("#"+key).before($span)
+                    }
+
+                    }
+            }
+        })
+    });
+    //验证码刷新
+       $('.shua').click(function () {
+        $('.value')[0].src += '?'
+    });
+
+    
+    
+</script>

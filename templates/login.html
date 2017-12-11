@@ -1,0 +1,132 @@
+{% load staticfiles %}
+
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'blosa/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'blosa/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{% static 'blosa/ie-emulation-modes-warning.js' %}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="{% static 'bootstrap/js/jquery-3.2.1.js' %}"></script>
+
+    <style>
+        .outher{
+            width: 15px;
+            height: 40px;
+            margin-left: 10px;
+        }
+        .file{
+            padding: 0px;
+            margin-left: 15px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-4">
+
+            <form class="form-signin">
+                 {% csrf_token %}
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <label for="username">姓名</label>
+                <input type="text" id="username" class="form-control" placeholder="username" required=""
+                       autofocus="" name="username">
+                <label for="password">密码</label>
+                <input type="password" id="password" class="form-control" placeholder="Password" required="" name="password">
+                <label for="Verification">验证码</label>
+                <div class="row">
+                    <div class="col-md-7 file">
+                        <input type="text" id="Verification" class="form-control" placeholder="Verification" required="" name="Verification">
+                    </div>
+                    <div class="col-md-2"  class="outher">
+                        <img class='value' src="/imger/" alt="">
+                        <a class="shua">刷新</a>
+
+                    </div>
+
+
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+            </form>
+            <button class="btn btn-lg btn-primary btn-block commer" >Sign in</button>
+
+
+        </div>
+    </div>
+
+
+</div> <!-- /container -->
+
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{% static 'blosa/ie10-viewport-bug-workaround.js' %}"></script>
+
+
+<script>
+    $('.commer').click(function () {
+        var user=$('#username').val();
+        var pwd=$('#password').val();
+        var ver=$('#Verification').val();
+        var csrf=$("[name='csrfmiddlewaretoken']").val();
+        $.ajax({
+            url:'/login/',
+            type:'POST',
+            data:{'username':user,'password':pwd,'Verification':ver,'csrfmiddlewaretoken':csrf},
+
+            success:function (data) {
+               console.log(data);
+               data=JSON.parse(data);
+                if (data['user']){
+{#                    console.log(data)#}
+                    location.href="/index/"
+                }
+                else {
+                    $('.checkbox').before($('<span>')).text(data['error']).css('color','red')
+                }
+            }
+        })
+
+
+    })
+
+    $('.shua').click(function () {
+        $('.value')[0].src += '?'
+    });
+
+
+
+
+</script>
+</body>
+</html>

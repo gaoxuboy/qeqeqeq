@@ -1,0 +1,321 @@
+{#{% load staticfiles %}#}
+
+{% extends 'base.html' %}
+
+
+{% block con %}
+
+    <style>
+        .countent {
+            font-size: 25px;
+        }
+
+        .countent_obj {
+            text-align: justify;
+            text-indent: 30px;
+            font-size: 15px;
+        {#        margin-right: 80px;#}
+
+        }
+
+        .post_item {
+            margin: 10px;
+        }
+
+        .post_item_foot {
+            font-size: 15px;
+        }
+
+        .list-group {
+            width: 700px;
+        }
+
+        .con {
+            margin-left: 550px;
+        }
+
+
+    </style>
+    <div class="row">
+
+        <div class="col-sm-8 blog-main">
+
+            <div class="blog-post">
+                <div class="post_item">
+                    <div class="post_item_body countent">
+                        <h3>{{ active_obj.title }}</h3>
+                        <p class="post_item_summary  countent_obj">
+                            {{ active_obj.articledetail.content }}
+
+                        </p>
+                        <div class="post_item_foot">
+                            <a href="http://www.cnblogs.com/ghostwu/"
+                               class="lightblue">{{ active_obj.blog.user.username }}</a>
+                            发布于 {{ active_obj.create_time| date:'Y-m-d' }}
+                            {% csrf_token %}
+                            <span class="article_comment">评论{{ active_obj.comment_count }}</span>
+
+                            <span class="article_view  comment">点赞</span> <span
+                                class=" comment_num">{{ active_obj.up_count }}</span><span class="comment_p"></span>
+                            &nbsp;
+                            <span class="article_view  upment">不支持</span> <span
+                                class=" comment_down">{{ active_obj.down_count }}</span><span class="comment_up"></span>
+
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div><!-- /.blog-post -->
+        </div><!-- /.blog-main -->
+
+
+                <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+                    <div class="sidebar-module sidebar-module-inset">
+                        <div class="row">
+
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">个人信息</div>
+                                <div class="panel-body">
+                                    <ul>
+                                        <li><img src="{{ user.avatar.url }}" alt="" width="60px" height="60px"></li>
+                                        <li>姓名&nbsp;<a href="">{{ user.username }}</a></li>
+                                        <li>标题&nbsp;<a href="">{{ user.blog.title }}</a></li>
+                                        <li>昵称&nbsp;<a href="">{{ user.nickname }}</a></li>
+                                        <li>园龄&nbsp;<a href="">{{ user.create_time|date:'Y-m-d' }}</a></li>
+                                        <li>粉丝&nbsp;<a href=""></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                             <div class="panel panel-primary">
+                                  <div class="panel-heading">随笔分类</div>
+                                  <div class="panel-body">
+                                      {% for foo in article_count %}
+                                            <li><a href="">{{ foo.0 }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ foo.1 }}</li>
+                                      {% endfor %}
+
+
+                              </div>
+                         </div>
+                            <div class="panel panel-primary" >
+                              <div class="panel-heading">标签分类</div>
+                              <div class="panel-body">
+                                  {% for foo in tagName %}
+                                        <li><a href="">{{ foo.0 }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ foo.1 }}</li>
+                                  {% endfor %}
+
+
+                              </div>
+                         </div>
+                            <div class="panel panel-primary" >
+                              <div class="panel-heading">时间分类</div>
+                              <div class="panel-body">
+                                  {% for foo in l %}
+                                        <li><a href="">{{ foo.0 }}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ foo.1 }}</li>
+                                  {% endfor %}
+
+
+                              </div>
+                         </div>
+
+
+                        </div>
+                    </div><!-- /.blog-sidebar -->
+
+
+                </div><!-- /.row -->
+
+    </div>
+    <h4>发表评论</h4>
+    <ul class="list-group">
+
+        {% for foo in comment_obj %}
+            <li class="list-group-item comment_item">
+                <a href="">{{ foo.user.username }}</a>&nbsp;&nbsp;
+                <a href="">{{ foo.create_time|date:"Y-m-d H:i" }}</a>
+                <span class="{{ foo.nid }}"></span>
+                <div>
+                    {% if foo.parent_id_id%}
+                        <span><a href="">@{{ foo.parent_id.user.username }}:{{ foo.parent_id.content }}</a></span><span>{{ foo.content }}</span>
+                    {% else %}
+                        {{ foo.content }}
+                    {% endif %}
+
+                </div>
+                <div class=" con">
+                    <span class="article_view "><a href="">点赞</a></span>
+                    <span class="article_view btn"><a href="#comment_content">回复</a></span>
+                </div>
+            </li>
+
+
+        {% endfor %}
+
+    </ul>
+    <form action="">
+        <div class="file">
+            <h4>昵称 &nbsp;<span>{{ request.user }}</span></h4>
+            <h4>评论内容:</h4>
+            {#            <input type="text" style="width: 700px ; height: 30px" class="top">&nbsp;&nbsp;&nbsp;#}
+            <textarea id="comment_content" cols="50" rows="10"></textarea>
+{#            <p>#}
+{#                <button class="bun"> 提交评论</button>#}
+{#            </p>#}
+        </div>
+    </form>
+     <p>
+         <button class="bun"> 提交评论</button>
+     </p>
+
+
+
+{% endblock %}
+
+{% block foo %}
+    <script>
+        {#    +++++++++++++++++++++++++不支持点赞#}
+        $('.upment').click(function () {
+            var active_id = {{ active_obj.nid }}
+                {% if request.user.is_authenticated %}
+                    $.ajax({
+                        url: '/updown/',
+                        type: 'POST',
+                        data: {
+                            'csrfmiddlewaretoken': '$("[name="csrfmiddlewaretoken"]").val()',
+                            'active_id': active_id
+                        },
+                        success: function (data) {
+                            data = JSON.parse(data)
+                            if (data['flag']) {
+                                $('.comment_down').text(parseInt($('.comment_down').text()) + 1)
+
+                            }
+                            else {
+                                $('.comment_up').text('不能重复').css({'color': 'red'})
+                                setTimeout(function () {
+                                    $('.comment_up').text('')
+                                }, 1000)
+                            }
+
+                        }
+
+
+                    })
+                {% endif %}
+        })
+
+
+        {# +++++++++++++++++++++++++++++++++点赞#}
+        $('.comment').click(function () {
+            var active_id = {{ active_obj.nid }}
+                {% if request.user.is_authenticated %}
+
+                    $.ajax({
+                        url: '/poll/',
+                        type: 'POST',
+                        data: {
+                            'active_id': active_id,
+                            'csrfmiddlewaretoken': '$("[name="csrfmiddlewaretoken"]").val()'
+                        },
+
+                        success: function (data) {
+                            data = JSON.parse(data)
+                            if (data['flag']) {
+                                $('.comment_num').text(parseInt($('.comment_num').text()) + 1)
+
+                            }
+                            else {
+                                $('.comment_p').text('不能重复点赞').css({'color': 'red'})
+                                setTimeout(function () {
+                                    $('.comment_p').text('')
+                                }, 1000)
+                            }
+
+                        }
+
+
+                    })
+                {% endif %}
+        })
+
+        var father_id = ''
+        var father_user=''
+        {#        +++++++++++++++++++评论#}
+        $('.btn').click(function () {
+            {#            //取到回复里面用户的名字#}
+            father_user = $(this).parent().siblings().eq(0).text()
+{#            alert(father_user)#}
+            $('#comment_content').val('@' + father_user + '\n')
+            father_id = $(this).parent().siblings().eq(2).attr('class')
+{#            alert(father_id)#}
+
+
+        })
+
+        String.prototype.format= function(){
+               var args = arguments;
+               return this.replace(/\{(\d+)\}/g,function(s,i){
+                 return args[i];
+               });
+        };
+
+        $('.bun').click(function () {
+
+{#            alert(father_user)#}
+            var article_id ={{ active_obj.nid }}
+            var index = $('#comment_content').val().indexOf('\n')
+            var conntent = $('#comment_content').val().substr(index + 1)
+{#            alert(conntent)#}
+
+
+            {#                var conntent=$(this).parent().prev().val()#}
+            {#        {% if request.user.is_authenticated %}#}
+            $.ajax({
+                url: '/comment/',
+                type: 'POST',
+                data: {
+                    'article_id': article_id,
+                    'csrfmiddlewaretoken': '$("[name="csrfmiddlewaretoken"]").val()',
+                    'conntent': conntent,
+                    'father_id': father_id ,
+                },
+
+                success: function (data) {
+                    data = JSON.parse(data);
+{#                    temp=father_user;#}
+
+{#                      if (temp){father_user="<a>@</a>"+temp}#}
+{#                    s = '<li class="list-group-item comment_item"><a href="">' + "{{ request.user.username }}" + '</a>&nbsp;&nbsp; <a href="">' +#}
+{#                        data["comment_time"] + '</a> <div> <span class="content">' + conntent + '</span> </div> <div class=" con">' +#}
+{#                        ' <span class="article_view "><a href="">点赞</a></span> <span class="article_view "><a href="#comment_content">回复</a>' +#}
+{#                        '</span> </div> </li>'#}
+                    alert(conntent)
+                    s='<li class="list-group-item comment_item"> <a href="">{0}</a>&nbsp;&nbsp; '
+                    '<a href="">{1}</a> <span class="{2}"></span> <div> <span><a href="">{3}</a>'
+                    '</span><span>{4}</span> </div> <div class=" con"> <span class="article_view ">'
+                    '<a href="">点赞</a></span> <span class="article_view btn">'
+                    '<a href="#comment_content">回复</a></span> </div> </li>'
+                        s=s.format(
+                                '{{ request.user.username }}',
+                                data["comment_time"],
+                                father_id,
+                                father_user,
+                                conntent
+                            );
+                    $('.list-group').append(s)
+                    $('.comment_content').val('')
+
+                }
+
+            })
+            {#            {% else %}#}
+
+            {#        {% endif %}#}
+        })
+
+        {#    ++++++++++++++++++++++++回复#}
+
+
+
+    </script>
+{% endblock %}

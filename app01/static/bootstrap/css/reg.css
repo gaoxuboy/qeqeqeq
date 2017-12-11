@@ -1,0 +1,26 @@
+
+
+/*.file_box{*/
+    /**/
+
+/*}*/
+.file_box{
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border: solid 1px beige;
+    margin-left: 20px;
+
+}
+
+.file_list{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 60px;
+    height: 60px;
+
+}
+#file_input{
+    opacity: 0;
+}

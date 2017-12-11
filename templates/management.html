@@ -1,0 +1,160 @@
+
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{% static 'bootstrap/js/jquery-3.2.1.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">欢迎光临 : {{ request.user }}<span class="sr-only">(current)</span></a></li>
+                <li><a href="/dell/">注销</a></li>
+                <li class="dropdown">
+                    <a href="/mima/">修改密码 </a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+{#                <li><a href="#">注册</a></li>#}
+{#                <li><a href="#">登录</a></li>#}
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Panel title</h3>
+        </div>
+        <div class="part">
+            <a href="/addarticle/">
+                <button type="button" data-toggle="modal" class="btn btn-info  add_book " data-target="#my-modal">增加</button>
+            </a>
+        </div>
+
+        <div class="my-table-tool pull-right">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="my-table-search"></label>
+                    <input type="text" class="form-control" id="my-table-search" placeholder="搜索条件">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+        </div>
+        <div class="panel-body">
+            <div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>序&nbsp;号</th>
+                        <th>文章标题</th>
+                        <th>内容</th>
+                        <th>文章类型</th>
+                        <th>文章评论数</th>
+
+                    </tr>
+                    {% for book in article_obj %}
+                        <tr>
+                            <td>{{ book.nid.start_index }}</td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.articledetail.article }}</td>
+                            <td>{{ book.category }}</td>
+                            <td>{{ book.comment_count }}</td>
+
+
+                            <td>
+                                <button type="button" class="btn btn-danger " id="deles">删除</button>
+                                |
+                                <a href="/edit/{{ book.id }}"><button type="button" class="btn btn-info">编辑</button></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+
+
+                </table>
+                <div class="row">
+                    <nav aria-label="Page navigation" class="col-md-4 col-md-offset-4">
+                        <!--<nav aria-label="Page navigation" class="push-rihgt">-->
+                        <ul class="pagination">
+                            {% if article_obj.has_previous %}
+                                <li><a href="/management/?page={{ article_obj.previous_page_number }}">上一页</a></li>
+                            {% else %}
+                                <li class="disabled"><a href="#">上一页</a></li>
+                            {% endif %}
+
+                            {% for num in p_obj.page_range %}
+                                <li><a href="/management/?page={{ num }}">{{ num }}</a></li>
+                            {% endfor %}
+                            {% if article_obj.has_next %}
+                                <li><a href="/management/?page={{ article_obj.next_page_number }}">下一页</a></li>
+                            {% else %}
+                                <li class="disabled"><a href="#">下一页</a></li>
+                            {% endif %}
+
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'bootstrap/js/jquery-3.2.1.js' %}"></script>
+<script>
+
+            $('.table').on('click','#deles',function () {
+                var title=$(this).parent().siblings().eq(1).text()
+                var del=$(this)
+                alert(del)
+
+{#                alert(del)#}
+                $.ajax({
+                    url:'/del/',
+                    type:'POST',
+                    data:{'title':title},
+                    success:function (data) {
+                        del.parent().parent().remove()
+                    }
+                })
+            })
+
+
+
+
+</script>
+
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+{#<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>#}
+
+
+</body>
+</html>

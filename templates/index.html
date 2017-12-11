@@ -1,0 +1,353 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://v3.bootcss.com/examples/blog/# -->
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
+
+    <title>Blog Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'Blog/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="{% static 'Blog/ie10-viewport-bug-workaround.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'Blog/blog.css' %}" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="{% static 'Blog/ie-emulation-modes-warning.js' %}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .container-fluid {
+            background-color: #b9def0;
+            font-size: 15px;
+            color: black;
+            font-weight: bold;
+
+        }
+
+        .active {
+            color: black;
+
+        }
+
+
+    </style>
+
+
+</head>
+
+<body>
+
+
+<div class="blog-masthead">
+    <div class="container">
+        <nav class="blog-nav">
+            {#            <a class="blog-nav-item active" href="http://v3.bootcss.com/examples/blog/#">Home</a>#}
+            <a class="blog-nav-item2" href="http://v3.bootcss.com/examples/blog/#">代码改变世界</a>
+            <a class="blog-nav-item" href="http://v3.bootcss.com/examples/blog/#"></a>
+            {% if request.user.is_authenticated %}
+                <a class="blog-nav-item" href="/dell/">退出</a>
+                <a class="blog-nav-item   data-toggle='modal'  data-target='hind'" href="/mima/" >修改密码</a>
+                <a class="blog-nav-item" href="http://127.0.0.1:8000/blog/{{ request.user.username }}">我的博客</a>
+                <a class="blog-nav-item" href="#">欢迎{{ request.user.username }}</a>
+            {% else %}
+                <a class="blog-nav-item" href="/login/">登录</a>
+                <a class="blog-nav-item" href="/register/">注册</a>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+{#]#}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% if type_list_obj == 0 %}
+                    <li class="active"><a href="/index/">LINK <span class="sr-only">(current)</span></a></li>
+                {% else %}
+                    <li><a href="/index/">LINK<span class="sr-only">(current)</span></a></li>
+                {% endif %}
+                {#                    <li class="active"><a href="#">all <span class="sr-only">(current)</span></a></li>#}
+                {% for type in type_list %}
+                    {% if type_list_obj == type.0 %}
+                        <li class="active"><a href="/blog/{{ type.0 }}">{{ type.1 }}</a></li>
+                    {% else %}
+                        <li><a href="/blog/{{ type.0 }}">{{ type.1 }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+
+<div class="container" >
+    <div class="blog-header">
+        <h1 class="blog-title">The Bootstrap Blog</h1>
+        <p class="lead blog-description">The official example template of creating a blog with Bootstrap.</p>
+    </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Brand</a>
+            </div>
+
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+
+                    {% for foo in func %}
+
+                        <li><a href="">{{ foo.1 }}</a></li>
+                    {% endfor %}
+
+                </ul>
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
+    <div class="row">
+
+
+        <div class="col-sm-8 blog-main">
+
+            <div class="blog-post">
+                {% for type_obj in list_all %}
+                    {% csrf_token %}
+                    <div class="post_item">
+                        <div class="digg">
+                            <div class="diggit">
+                                <span class="diggnum  comment" id="digg_count_7475756">{{ type_obj.up_count }}</span>
+                            </div>
+                            <div class="clear"></div>
+                            <div id="digg_tip_7475756" class="digg_tip"></div>
+                        </div>
+                        <div class="post_item_body">
+                            <h3><a class="titlelnk"
+                                   href="/blog/{{ type_obj.blog.user.username }}/active/{{ type_obj.nid }}"
+                                   target="_blank">{{ type_obj.title }}</a>
+                            </h3>
+                            <p class="post_item_summary">
+                                <a href="/blog/{{ type_obj.blog.user.username }}" target="_blank"><img width="48" height="48"
+                                                                                               class="pfs"
+                                                                                               src="{{ type_obj.blog.user.avatar.url }}"
+                                                                                               alt=""></a>
+                                {{ type_obj.desc }}
+                            </p>
+                            <div class="post_item_foot">
+                                <a href="/blog/{{ type_obj.blog.user.username }}/active/{{ type_obj.nid }}"
+                                   class="lightblue">{{ type_obj.blog.user.username }}</a>
+                                发布于 {{ type_obj.create_time| date:'Y-m-d' }}
+                                <span class="article_comment">
+                                <a href="/blog/{{ type_obj.blog.user.username }}/active/{{ type_obj.nid }}"
+                                   title="2017-09-04 21:51" class="gray">评论{{ type_obj.comment_count }}</a></span>
+
+
+                                <span class="article_view comment" >点赞</span> <span
+                                    class="comment_num">{{ type_obj.up_count }}</span><span class="comment_p"></span>
+                                &nbsp;
+                                <span class="article_view  upment">不支持</span> <span
+                                    class=" comment_down">{{ type_obj.down_count }}</span><span
+                                    class="comment_up"></span>
+                                <span class="article_view"><a href="/blog/{{ type_obj.blog.user.username }}/active/{{ type_obj.nid }}"
+                                                              class="gray">阅读{{ type_obj.read_count }}</a></span>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                {% endfor %}
+
+
+            </div><!-- /.blog-post -->
+
+
+        </div><!-- /.blog-main -->
+
+        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+            <div class="sidebar-module sidebar-module-inset">
+                <h4>About</h4>
+                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet
+                    fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+            </div>
+            <div class="sidebar-module">
+                <h4>Archives</h4>
+                <ol class="list-unstyled">
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">March 2014</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">February 2014</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">January 2014</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">December 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">November 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">October 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">September 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">August 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">July 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">June 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">May 2013</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">April 2013</a></li>
+                </ol>
+            </div>
+            <div class="sidebar-module">
+                <h4>Elsewhere</h4>
+                <ol class="list-unstyled">
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">GitHub</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">Twitter</a></li>
+                    <li><a href="http://v3.bootcss.com/examples/blog/#">Facebook</a></li>
+                </ol>
+            </div>
+        </div><!-- /.blog-sidebar -->
+        <nav aria-label="Page navigation" class="col-md-4 col-md-offset-4">
+            <!--<nav aria-label="Page navigation" class="push-rihgt">-->
+            <ul class="pagination">
+                {% if list_all.has_previous %}
+                    <li><a href="/index/?page={{ list_all.previous_page_number }}">上一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="#">上一页</a></li>
+                {% endif %}
+
+                {% for num in p_obj.page_range %}
+                    <li><a href="/index/?page={{ num }}">{{ num }}</a></li>
+                {% endfor %}
+                {% if list_all.has_next %}
+                    <li><a href="/index/?page={{ list_all.next_page_number }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="#">下一页</a></li>
+                {% endif %}
+
+            </ul>
+        </nav>
+
+
+    </div><!-- /.row --
+
+
+</div><!-- /.container -->
+{#<div class="row">#}
+{#                    <nav aria-label="Page navigation" class="col-md-4 col-md-offset-4">#}
+{#                        <!--<nav aria-label="Page navigation" class="push-rihgt">-->#}
+{#                        <ul class="pagination">#}
+{#                            {% if list_all.has_previous %}#}
+{#                                <li><a href="/index/?page={{ list_all.previous_page_number }}">上一页</a></li>#}
+{#                            {% else %}#}
+{#                                <li class="disabled"><a href="#">上一页</a></li>#}
+{#                            {% endif %}#}
+{##}
+{#                            {% for num in p_obj.page_range %}#}
+{#                                <li><a href="/index/?page={{ num }}">{{ num }}</a></li>#}
+{#                            {% endfor %}#}
+{#                            {% if list_all.has_next %}#}
+{#                                <li><a href="/index/?page={{ list_all.next_page_number }}">下一页</a></li>#}
+{#                            {% else %}#}
+{#                                <li class="disabled"><a href="#">下一页</a></li>#}
+{#                            {% endif %}#}
+{##}
+{#                        </ul>#}
+{#                    </nav>#}
+{#                </div>#}
+
+<footer class="blog-footer">
+    <p>Blog template built for <a href="http://getbootstrap.com/">Bootstrap</a> by <a href="https://twitter.com/mdo">@mdo</a>.
+    </p>
+    <p>
+        <a href="http://v3.bootcss.com/examples/blog/#">Back to top</a>
+    </p>
+</footer>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="hind">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <!--<p>One fine body&hellip;</p>-->
+                <form>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputFile">File input</label>
+                        <input type="file" id="exampleInputFile">
+                        <p class="help-block">Example block-level help text here.</p>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Check me out
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{% static 'Blog/jquery.min.js' %}"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="{% static 'Blog/bootstrap.min.js' %}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{% static 'Blog/ie10-viewport-bug-workaround.js' %}"></script>
+<script src="{% static 'bootstrap/js/jquery-3.2.1.js' %}"></script>
+ <script>
+
+
+
+    </script>
+
+</body>
+</html>

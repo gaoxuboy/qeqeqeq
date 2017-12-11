@@ -1,0 +1,299 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="{% static 'bootstrap/js/jquery-3.2.1.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+</head>
+<style>
+    span{
+        color: red;
+    }
+    .container{
+        margin-left: 500px;
+    }
+</style>
+
+<body>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <form class="form-signin list">
+                {% csrf_token %}
+                <h2 class="form-signin-heading  zong">修改密码</h2>
+{#                <span>{{ error }}</span>#}
+{#                <label for="old_password" class="sr-only">密码</label>#}
+                <p>原密码<input type="password" id="old_password" class="form-control" name="old_password" required="" autofocus=""></p>
+{#                <label for="new_password" class="sr-only">密码</label>#}
+                <p>新密码<input type="password" id="new_password" class="form-control" name="new_password" required=""></p>
+{#                <label for="inputPassword" class="sr-only">密码</label>#}
+                <p>确认密码<input type="password" id="inputPassword" class="form-control" name="new2_password" required=""></p>
+
+            </form>
+             <div>
+                 <button class="btn btn-lg btn-primary btn-block  quxiao" type="submit">取消</button>
+                &nbsp;
+                <button class="btn btn-lg btn-primary btn-block tijiao" type="submit">提交</button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div> <!-- /container -->
+<script>
+
+    $('.quxiao').click(function () {
+        location.href='{{ request.path }}'
+    })
+
+{#    $('.tijiao').click(function () {#}
+{#        $('span').val().remove()#}
+{#    })#}
+     $(".zong").click(function () {
+        $('input:gt(3)').val('').nextAll().remove()
+    })
+    $('#old_password').blur(function () {
+       var old_password=$(this).val()
+{#        alert(old_password)#}
+{#            alert(123)#}
+        $.ajax({
+            url:'/mima/',
+            type:'POST',
+{#            data:{'old_passwprd':old_password},#}
+            success:function (data) {
+{#                alert(data)#}
+                if ($('#old_password').val()==''){
+{#                    alert(13131)#}
+                    $('#old_password').nextAll().remove()
+                    $span=$('<span>').text('请填写密码').css({'color':'red'})
+{#                    alert(456)#}
+                    $('#old_password').after($span)
+{#                    alert(1)#}
+{#                    $('#old_password').nextAll().remove()#}
+                }
+                else {
+{#                    alert(2)#}
+                    $('#old_password').nextAll().remove()
+{#                    console.log($('#old_password').nextAll())#}
+                }
+
+
+            }
+
+        })
+
+
+
+
+    })
+
+
+    $('#new_password').blur(function () {
+       var new_password=$(this).val()
+{#        alert(old_password)#}
+{#            alert(123)#}
+        $.ajax({
+            url:'/mima/',
+            type:'POST',
+{#            data:{'old_passwprd':old_password},#}
+            success:function (data) {
+{#                alert(data)#}
+                if ($('#new_password').val()==''){
+{#                    alert(13131)#}
+                    $('#new_password').nextAll().remove()
+                    $span=$('<span>').text('请填写密码').css({'color':'red'})
+{#                    alert(456)#}
+                    $('#new_password').after($span)
+{#                    alert(1)#}
+{#                    $('#old_password').nextAll().remove()#}
+                }
+                else {
+{#                    alert(2)#}
+                    $('#new_password').nextAll().remove()
+{#                    console.log($('#old_password').nextAll())#}
+                }
+
+
+            }
+
+        })
+
+
+
+
+    })
+
+
+    $('#inputPassword').blur(function () {
+       var inputPassword=$(this).val()
+{#        alert(old_password)#}
+{#            alert(123)#}
+        $.ajax({
+            url:'/mima/',
+            type:'POST',
+{#            data:{'old_passwprd':old_password},#}
+            success:function (data) {
+{#                alert(data)#}
+                if ($('#inputPassword').val()==''){
+{#                    alert(13131)#}
+                    $('#inputPassword').nextAll().remove()
+                    $span=$('<span>').text('请填写密码').css({'color':'red'})
+{#                    alert(456)#}
+                    $('#inputPassword').after($span)
+{#                    alert(1)#}
+{#                    $('#old_password').nextAll().remove()#}
+                }
+                else if($('#inputPassword').val() != $('#new_password').val()){
+                     $('#inputPassword').nextAll().remove()
+                    $span=$('<span>').text('密码输入不一致').css({'color':'red'})
+{#                    alert(456)#}
+                    $('#inputPassword').after($span)
+                }
+                else {
+{#                    alert(2)#}
+                    $('#inputPassword').nextAll().remove()
+{#                    console.log($('#old_password').nextAll())#}
+                }
+
+
+            }
+
+        })
+
+
+
+
+    })
+
+      $('.tijiao ').click(function () {
+        old_password=$('#old_password').val()
+{#        alert(old_password)#}
+        new_password=$('#new_password').val()
+{#        alert(new_password)#}
+        inputPassword=$('#inputPassword').val()
+{#        alert(inp/utPassword)#}
+
+        $.ajax({
+            url:'/mima/',
+            type:'POST',
+            data:{'old_password':old_password,
+                'new_password':new_password,
+                'inputPassword':inputPassword
+            },
+            success:function (data) {
+
+                if($('#inputPassword').val() == $('#new_password').val()){
+                     $('#inputPassword').nextAll().remove()
+                    $span=$('<span>').text('修改成功').css({'color':'red'})
+{#                    alert(456)#}
+                    $('.tijiao').before($span)
+                    location.href='/login/'
+                }
+                }
+        })
+
+
+
+    })
+
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#    })#}
+{##}
+{#    $('#new_password').blur(function () {#}
+{#        old_password=$('#new_password').val()#}
+{##}
+{#        $.ajax({#}
+{#            url:'/mima/',#}
+{#            type:'POST',#}
+{#            data:{'new_password':new_password},#}
+{#            success:function (data) {#}
+{#                if(data['state'] !=Null){#}
+{#                    $('#new_password').nextAll().remove()#}
+{#                    $span=$('<span>').text('请输入密码').css({'color':'red'})#}
+{#                    $('#new_password').after($span)#}
+{#                }#}
+{#                else {#}
+{#                    $('#new_password').nextAll().remove()#}
+{#                }#}
+{#            }#}
+{##}
+{##}
+{#        })#}
+{#        $("#inputPassword").blur(function () {#}
+{#        if ($("#inputPassword").val() == "") {#}
+{#            $("#inputPassword").nextAll().remove();#}
+{#            $span = $('<span>').text("请输入确认密码").css({"display": "block", "color": "red", "margin-top": '5px'});#}
+{#            $("#inputPassword").after($span)#}
+{#        }#}
+{##}
+{#        else if ($("#new_password").val() != $("#inputPassword").val()) {#}
+{#            $("#inputPassword").nextAll().remove();#}
+{#            $span = $('<span>').text("两次密码输入不一致，请重新输入").css({"display": "block", "color": "red", "margin-top": '5px'});#}
+{#            $("#inputPassword").after($span)#}
+{#        }#}
+{#        else {#}
+{#            $("#inputPassword").nextAll().remove()#}
+{#        }#}
+{#    });#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#    })#}
+{##}
+{##}
+{#    $('.tijiao ').click(function () {#}
+{#        old_password=$('#old_password').val()#}
+{#        alert(old_password)#}
+{#        new_password=$('#new_password').val()#}
+{#        alert(new_password)#}
+{#        inputPassword=$('#inputPassword').val()#}
+{#        alert(inputPassword)#}
+{##}
+{#        $.ajax({#}
+{#            url:'/mima/',#}
+{#            type:'POST',#}
+{#            data:{'old_password':old_password,#}
+{#                'new_password':new_password,#}
+{#                'inputPassword':inputPassword#}
+{#            },#}
+{#            success:function (data) {#}
+{#                data=JSON.parse(data)#}
+{#                alert(修改成功)#}
+{#                }#}
+{#        })#}
+{##}
+{##}
+{##}
+{#    })#}
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
